@@ -174,3 +174,44 @@ evidence and as comparison points for Phase 3 imputation ablation.
 
 Diagnostic 6 will recompute the four adjacency matrices using the
 exponential kernel.
+
+## Diagnostic 6 result (2026-05-26)
+
+Recomputed the four candidate adjacency matrices using the exponential
+kernel adopted in Diagnostic 5, written under the _exp filename suffix
+alongside the D4 Gaussian matrices.
+
+Fitted exponential length scales (from D5 kernel_fit_results.csv,
+verified at startup):
+  ELL_WSPD   = 459.1 km   (half_corr ≈ 318 km)
+  ELL_WVHT   = 714.8 km   (half_corr ≈ 495 km)
+  ELL_SHARED = sqrt(ELL_WSPD * ELL_WVHT) ≈ 572.9 km
+
+Per-matrix statistics (27-station network, 702 off-diagonal entries):
+
+  A_WSPD_exp   sum=205.0  min=0.0346  max=0.9039  effective_edges=702
+  A_WVHT_exp   sum=295.9  min=0.1152  max=0.9372  effective_edges=702
+  A_shared_exp sum=249.1  min=0.0675  max=0.9222  effective_edges=702
+  A_uniform    sum= 27.0  min=0.0385  max=0.0385  effective_edges=702
+               (bit-for-bit identical to D4 uniform; saved under both
+               adjacency_uniform.npy and adjacency_uniform_exp.npy for
+               naming consistency)
+
+Key structural observation: under the exponential kernel, every off-
+diagonal entry across all three distance-based matrices exceeds the
+0.01 effective-edges threshold. The Gaussian-WSPD matrix from D4 was
+effectively sparse (504/702 edges); the exponential-WSPD matrix is
+effectively dense (702/702). This is the heavy-tailed property of the
+exponential kernel made numerical: distant station pairs receive small
+but non-negligible adjacency weight, where the Gaussian kernel
+effectively zeroed them out. Downstream graph imputation models will
+see substantially more cross-station signal under the exponential
+adjacency.
+
+The Gaussian adjacencies from D4 remain on disk for Phase 3 ablation:
+each imputation experiment in Phase 3 will be run under both kernel
+families to quantify the impact of the kernel choice on imputation
+accuracy.
+
+End of Phase 2 (graph adjacency construction). Phase 3 (imputation
+model training) is the next methodological step.
