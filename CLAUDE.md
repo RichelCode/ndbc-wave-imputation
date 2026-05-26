@@ -108,3 +108,69 @@ visualization currently shows Pearson only. LOWESS smoother
 (frac=0.4) with 1000-iteration pair-level bootstrap 95% CI bands.
 Lag-0 only; lag-aware correlation flagged as future appendix work.
 Haversine distance; landmass-routing flagged as future refinement.
+
+## Diagnostic 4 result (2026-05-26)
+
+Constructed candidate adjacency matrices for the 27-station network
+using Gaussian kernels with variable-specific sigma values calibrated
+to match the empirical 0.5-decorrelation distances from Diagnostic 3:
+
+  sigma_WSPD   = 400 / sqrt(2 ln 2) ≈ 340 km
+  sigma_WVHT   = 650 / sqrt(2 ln 2) ≈ 552 km
+  sigma_shared = sqrt(sigma_WSPD * sigma_WVHT) ≈ 433 km
+
+Four matrices written to data/processed/adjacency_*.npy:
+A_WSPD, A_WVHT, A_shared, A_uniform (1/26 off-diagonal baseline).
+Effective edges (> 0.01): WSPD 504, WVHT 702, shared 638, uniform 702.
+
+The kernel calibration figure (figures/kernel_calibration.png)
+exposed a systematic misfit between the Gaussian kernel and the
+empirical LOWESS curve: the Gaussian overshoots short-range
+correlations and undershoots the long-range tail on both variables.
+This misfit motivated the Diagnostic 5 kernel-family comparison
+below; the Gaussian adjacencies remain on disk as baseline-rejection
+evidence and as comparison points for Phase 3 imputation ablation.
+
+## Diagnostic 5 result (2026-05-26)
+
+Fitted three single-parameter kernel families (Gaussian, Exponential,
+Matern-1.5) to the empirical decorrelation curves for WSPD and WVHT,
+scored by RMSE against the per-pair scatter.
+
+Per-variable fits and RMSE rankings:
+
+  WSPD (165 pairs):
+    Gaussian:    ell = 332 km, RMSE = 0.1271, half_corr = 391 km
+    Exponential: ell = 459 km, RMSE = 0.0558, half_corr = 318 km
+    Matern-1.5:  ell = 377 km, RMSE = 0.0899, half_corr = 365 km
+
+  WVHT (130 pairs):
+    Gaussian:    ell = 495 km, RMSE = 0.1380, half_corr = 583 km
+    Exponential: ell = 715 km, RMSE = 0.1021, half_corr = 495 km
+    Matern-1.5:  ell = 560 km, RMSE = 0.1095, half_corr = 542 km
+
+DECISION: adopt the exponential kernel
+  K(d, ell) = exp(-d / ell)
+with variable-specific length scales for the imputation pipeline.
+The Gaussian kernel committed to in Diagnostic 4 is retained as a
+baseline for ablation experiments. Justification:
+
+  1. Exponential wins both panels by RMSE.
+  2. RMSE gaps are substantial (2.3x lower than Gaussian on WSPD,
+     1.35x lower on WVHT) and not within fit noise.
+  3. The same kernel family wins both variables, simplifying the
+     methods description: variable-specific length scales, single
+     kernel family.
+  4. The exponential kernel corresponds to a Matern-0.5 covariance
+     (first-order Markov spatial structure), which is the physically
+     correct expectation for non-differentiable atmospheric and
+     oceanographic fields. Gaussian kernels imply infinitely
+     differentiable underlying fields, which is unphysical for these
+     variables.
+
+The Gaussian-based adjacency matrices from Diagnostic 4 stay on
+disk (data/processed/adjacency_*.npy) as the baseline-rejection
+evidence and as comparison points for Phase 3 imputation ablation.
+
+Diagnostic 6 will recompute the four adjacency matrices using the
+exponential kernel.
