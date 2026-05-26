@@ -19,7 +19,7 @@ engineering consume the forecasts.
 - Filter: has_stdmet == True (must measure both WVHT and WSPD)
 - Observational window: 2010-01-01 through 2023-12-31
 - Cadence: hourly (NDBC stdmet)
-- Initial candidate count: 39 (from Diagnostic 1, 2026-05-25);
+- Initial candidate count: 34 (from Diagnostic 1, 2026-05-25);
   final cluster size set by Diagnostic 2 (completeness audit).
   Target final size: 15-25 stations.
 - Methods family: deep learning (graph-based imputation, probabilistic
@@ -49,5 +49,5 @@ engineering consume the forecasts.
 
 ## Diagnostic 1 result (2026-05-25)
 1355 NDBC active stations -> 263 in (lat 18-31N, lon -98 to -80W)
-bounding box -> 39 with station_id matching ^42\d{3}$ -> these are
-the candidates we proceed with.
+bounding box -> 39 stations matching ^42\d{3}$ -> 34 after has_stdmet
+filter -> these are the candidates we proceed with.
