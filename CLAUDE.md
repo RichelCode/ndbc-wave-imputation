@@ -51,3 +51,28 @@ engineering consume the forecasts.
 1355 NDBC active stations -> 263 in (lat 18-31N, lon -98 to -80W)
 bounding box -> 39 stations matching ^42\d{3}$ -> 34 after has_stdmet
 filter -> these are the candidates we proceed with.
+
+## Diagnostic 2 result (2026-05-26)
+
+Attempted full 2010-2023 hourly stdmet download for all 34 candidate
+stations. 27 succeeded, 7 returned empty dicts from ndbc-api despite
+has_stdmet=True in NDBC's inventory (likely TABS / partner-network
+buoys whose archived data lives outside NDBC's primary stdmet
+endpoint). The 7 dropped: 42027, 42028, 42031, 42066, 42354, 42357,
+42358. They appear as zero-rows in the completeness heatmap and are
+to be excluded from the working set going forward.
+
+Aggregate statistics across the 27 surviving stations:
+- Total raw stdmet rows: 5,339,638
+- Mean station-month completeness: 47.4%
+- Station-months >= 75% complete: 46.0%
+- Working candidate count after Diagnostic 2: 27
+
+The mean completeness is pulled down by partial-lifetime stations
+(42084, 42091, 42095, 42097, 42098 came online 2018-2021;
+42067 has a single 2016-2017 deployment window). Whole-window
+workhorses include 42001, 42035, 42036, 42039, 42040, 42055, 42056.
+
+Storm-period outage signatures visible in 2017 (Harvey), 2020
+(Laura/Sally/Delta), 2021 (Ida) — supports the storm-MNAR
+stress-test framing in the research plan.
