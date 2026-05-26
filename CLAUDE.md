@@ -76,3 +76,35 @@ workhorses include 42001, 42035, 42036, 42039, 42040, 42055, 42056.
 Storm-period outage signatures visible in 2017 (Harvey), 2020
 (Laura/Sally/Delta), 2021 (Ida) — supports the storm-MNAR
 stress-test framing in the research plan.
+
+## Diagnostic 3 result (2026-05-26)
+
+Computed pairwise Pearson correlations of deseasoned hourly WVHT and
+WSPD anomalies across the 27 surviving stations. 351 possible pairs;
+229 retained (pair excluded only if BOTH variables had <2 years of
+overlapping observations). Per-variable inclusion: 165 pairs for WSPD,
+130 pairs for WVHT.
+
+Empirical decorrelation length scales (LOWESS-smoothed correlation
+crossing 0.5):
+- WSPD: ~400 km (consistent with synoptic-scale system widths)
+- WVHT: ~650 km (consistent with basin-scale swell propagation)
+
+Wave height correlations are systematically higher than wind speed
+correlations by 0.1-0.2 across all observed distances (50-1400 km),
+with the gap peaking near 400 km where wind has decorrelated but
+waves remain coherent.
+
+Implication for downstream imputation: the graph adjacency used for
+WSPD imputation should have a tighter spatial kernel than the
+adjacency used for WVHT imputation. A single shared adjacency for
+both variables would mis-specify one of them. This is a candidate
+methodological contribution for the paper or a methods spinout.
+
+Methodology: hourly climatology (month-of-year x hour-of-day, 288
+bins) removed per station per variable. Pairwise-complete overlap
+indexing. Pearson and Spearman both computed and stored;
+visualization currently shows Pearson only. LOWESS smoother
+(frac=0.4) with 1000-iteration pair-level bootstrap 95% CI bands.
+Lag-0 only; lag-aware correlation flagged as future appendix work.
+Haversine distance; landmass-routing flagged as future refinement.
