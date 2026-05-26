@@ -135,7 +135,8 @@ def hourly_observed_mask(df: pd.DataFrame) -> pd.Series:
         return pd.Series(dtype=bool)
     numeric = df[have_cols].apply(pd.to_numeric, errors="coerce")
     any_target = numeric.notna().any(axis=1)
-    return any_target.groupby(df.index.floor("h")).any()
+    ts = df.index.get_level_values("timestamp") if isinstance(df.index, pd.MultiIndex) else df.index
+    return any_target.groupby(ts.floor("h")).any()
 
 
 def station_monthly_completeness(
