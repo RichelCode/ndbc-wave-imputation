@@ -6,6 +6,9 @@ scipy>=1.11
 # NDBC access
 ndbc-api>=0.26
 
+# Storage
+pyarrow>=15.0
+
 # Plotting
 matplotlib>=3.8
 seaborn>=0.13
