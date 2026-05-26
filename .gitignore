@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Data — don't commit raw or processed NDBC files (too large, reproducible from code)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Figures — keep source code that generates them, not necessarily the outputs
+# (remove this line if you want figures tracked)
+figures/*.png
+figures/*.pdf
+!figures/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+*.key
