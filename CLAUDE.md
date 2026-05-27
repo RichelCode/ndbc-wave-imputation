@@ -215,3 +215,107 @@ accuracy.
 
 End of Phase 2 (graph adjacency construction). Phase 3 (imputation
 model training) is the next methodological step.
+
+## Diagnostic 7 result (2026-05-26)
+
+Assembled the 27 per-station Parquet files into a single
+(122712, 27, 2) float64 observation tensor for downstream Phase 3
+imputation training. Variable axis order locked as [WVHT, WSPD]
+(slot 0 = WVHT, slot 1 = WSPD). Station order verified against
+adjacency_station_order.csv from Phase 2 at script startup; mismatch
+would have aborted with exit 1 since the tensor's N axis must align
+with the adjacency matrices.
+
+Outputs:
+  observations.npy       (122712, 27, 2) float64, NaN for missing
+  observation_mask.npy   (122712, 27, 2) bool,    True iff observed
+  tensor_metadata.json   shape, dimensions, time range, station
+                         and variable order, per-variable and
+                         per-station missingness rates
+
+Tensor-level statistics:
+  Total cells:          6,626,448
+  Observed cells:       3,166,016
+  Overall missingness:  0.5222
+  WVHT missingness:     0.5434
+  WSPD missingness:     0.5010
+
+WSPD missingness is lower than WVHT missingness, consistent with the
+D3 pair-inclusion asymmetry (165 WSPD pairs cleared the two-year
+overlap threshold versus 130 WVHT pairs). Wind-sensor reliability
+exceeds wave-sensor reliability on the offshore Gulf fleet, and the
+tensor representation preserves this asymmetry. Tensor footprint
+50.6 MB; mask footprint 6.3 MB.
+
+D7's 52.2% overall missingness is slightly higher than D2's 47.4%
+mean completeness (so 52.6% missingness) because D2 counted any-of-
+WVHT-or-WSPD as observed at a given hour while D7 counts each
+variable separately. The 5-point gap is the fraction of cells where
+one variable is reported and the other is not.
+
+End of Phase 3 data foundation. Diagnostic 8 builds the evaluation
+masks that will score every Phase 3 imputation model against the
+same held-out cells.
+
+## Diagnostic 8 result (2026-05-26)
+
+Designed the temporal train/val/test split and pre-computed 15
+evaluation masks for the Phase 3 imputation pipeline. Training-time
+masks are generated on the fly by the training script and are NOT
+materialized here; only the evaluation masks (used to score all
+Phase 3 models against identical held-out cells) are produced.
+
+Temporal split (locked):
+  train:  2010-01-01 00:00 .. 2019-12-31 23:00   (87,648 hours)
+  val:    2020-01-01 00:00 .. 2021-12-31 23:00   (17,544 hours)
+  test:   2022-01-01 00:00 .. 2023-12-31 23:00   (17,520 hours)
+  Sum:    122,712 hours (matches full time axis)
+
+Each split contains at least one major Gulf hurricane: Harvey
+(2017, train), Laura/Sally/Delta (2020) and Ida (2021, val),
+Ian (2022, test). Storm-period generalization is therefore tested
+at every stage of model development.
+
+Mask types and parameters:
+  MCAR:        rates 10%, 25%, 50%; 3 seeds each (9 masks)
+  Block MCAR:  rate 25%, 72-hr block length; 3 seeds (3 masks)
+  Empirical MNAR: rate 25%, 80% of hidden cells in storm windows;
+                  3 seeds (3 masks)
+  Total: 15 masks. All target the test split for this iteration;
+  cells outside test are always False so the mask shape stays
+  (T, N, V) bool for broadcasting convenience.
+
+DECISION (storm-window detection): a "storm hour" is one in which
+at least 25% of currently-deployed stations are simultaneously
+missing (transient missingness within each station's deployment
+window, NOT pre-deployment or post-retirement absence). The
+fractional threshold replaces the original absolute threshold
+because the latter biased early years (when only 21 stations were
+deployed) against later years (27 stations deployed). The
+deployment-window filter was added after the initial implementation
+flagged every hour from 2010-2017 as a storm hour due to six
+late-deployment stations being trivially "missing" before they
+existed.
+
+Storm-window summary statistics (after +/- 12 hr buffer):
+  WVHT: 33,759 storm hours; 455 windows; 55,074 hrs (0.449 of time)
+  WSPD: 46,715 storm hours; 493 windows; 77,218 hrs (0.629 of time)
+
+WSPD coverage exceeds WVHT coverage; this is acceptable because the
+80/20 MNAR sampling still concentrates hidden cells in storm-
+correlated periods even with broader windows. The figure
+(figures/missingness_masks.png) shows MNAR masks visually
+concentrated in Jan-Sep 2022 (the storm-rich first half of the
+test period, including Hurricane Ian in September), with sparse
+banding in 2023.
+
+Achieved hidden fractions: all masks land within 0.0001 of target
+rate (floor() rounding error on cell-count math).
+
+Numbering note: this is the eighth diagnostic but the ninth script
+file (src/09_missingness_masks.py). The file/diagnostic offset
+accumulated earlier in the project and is preserved.
+
+Phase 3 data foundation (tensor + masks + split) is now complete.
+Diagnostic 9 is the PyTorch + PyTorch Geometric + GRIN reference
+implementation environment setup.
