@@ -47,6 +47,57 @@ engineering consume the forecasts.
   type or wrong basin. Diagnostic 1 found 263 stations in the original
   Gulf bounding box; only 39 were actual offshore Gulf buoys.
 
+  ## Current direction (as of 2026-05-27)
+
+### Target
+- Venue: Renewable Energy (primary), Journal of Atmospheric and Oceanic Technology (backup)
+- Status: Phase 3 D10 complete (first GRIN trained); now building baselines
+
+### Three contributions for the paper
+1. Variable-specific exponential graph adjacencies for joint multivariate
+   marine imputation (motivated by 1.6× decorrelation asymmetry between
+   WVHT 715 km and WSPD 459 km)
+2. Deployment-aware fractional-threshold MNAR mask construction
+   (distinguishes structural absence from transient missingness)
+3. End-to-end calibrated uncertainty propagation from probabilistic
+   imputation through forecast intervals, evaluated under hurricane
+   conditions on public NDBC data
+
+### Competing papers (cite these, differentiate from these)
+- Zhao et al. 2025, Sustainable Energy Grids and Networks: probabilistic
+  diffusion imputation of offshore wind, Norwegian data, single-variable,
+  Gaussian adjacency. No downstream forecasting.
+- He & Hu 2025, arXiv 2508.10705: score-based diffusion forecasting of
+  offshore wind power under typhoons, Chinese wind farm cluster. No
+  imputation step.
+- Pashmchi et al. 2026, arXiv 2603.15564: Rubin's-rule multiple-imputation
+  uncertainty propagation framework for solar PV forecasting. No marine,
+  no spatial structure, no diffusion.
+
+### Six-stage execution plan
+1. Stage 1 : Baseline comparison on D10 single-variable
+   setup. LOCF, linear interpolation, climatology, k-NN, BRITS, SAITS,
+   CSDI. Statistical significance testing.
+2. Stage 2 : Bivariate (WVHT + WSPD) training with
+   variable-specific adjacency hypothesis test.
+3. Stage 3 : CSDI imputation with calibration
+   evaluation. Add CRPS, PICP, PINAW metrics.
+4. Stage 4 : Forecasting model with Monte Carlo
+   uncertainty propagation. Storm-period calibration is the killer result.
+5. Stage 5 : Paper writing.
+6. Stage 6 : Collaborator review and
+   submission.
+
+### What this means for the file numbering
+- src/12_baselines_framework.py is the next file to write
+- src/13_baseline_linear.py, 14_baseline_locf_clim.py, 15_baseline_knn.py,
+  16_baseline_brits.py, 17_baseline_saits.py, 18_baseline_csdi.py follow
+- src/19_baseline_summary.py aggregates and produces comparison table+figure
+- D11 (adjacency × kernel ablation as originally planned) becomes
+  Stage 2 work; we now plan it bivariate from the start
+
+
+
 ## Diagnostic 1 result (2026-05-25)
 1355 NDBC active stations -> 263 in (lat 18-31N, lon -98 to -80W)
 bounding box -> 39 stations matching ^42\d{3}$ -> 34 after has_stdmet
