@@ -34,3 +34,8 @@ Thumbs.db
 # Secrets
 .env
 *.key
+
+# Diagnostic 10 outputs — keep these in version control (publication artifacts)
+!data/processed/d10_results.json
+!data/processed/d10_config.yaml
+!figures/d10_*.png
