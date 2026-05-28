@@ -35,6 +35,9 @@ Thumbs.db
 .env
 *.key
 
+# Training logs (subdirectories with Lightning CSV metrics stay tracked via explicit add)
+logs/*.log
+
 # Diagnostic 10 outputs — keep these in version control (publication artifacts)
 !data/processed/d10_results.json
 !data/processed/d10_config.yaml
