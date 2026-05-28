@@ -51,3 +51,5 @@ logs/*.log
 # Baseline results — keep these in version control (publication artifacts)
 !data/processed/baseline_*_results.json
 !data/processed/baseline_significance.json
+!data/processed/baseline_summary_table.tex
+!data/processed/baseline_summary_table.md
