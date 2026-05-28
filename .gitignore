@@ -40,6 +40,11 @@ Thumbs.db
 !data/processed/d10_config.yaml
 !figures/d10_*.png
 
+# Baseline figures — keep these in version control (publication artifacts)
+!figures/baseline_*.png
+!figures/baseline_*.pdf
+!figures/baseline_*.txt
+
 # Baseline results — keep these in version control (publication artifacts)
 !data/processed/baseline_*_results.json
 !data/processed/baseline_significance.json
