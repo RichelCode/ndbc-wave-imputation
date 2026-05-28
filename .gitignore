@@ -42,3 +42,4 @@ Thumbs.db
 
 # Baseline results — keep these in version control (publication artifacts)
 !data/processed/baseline_*_results.json
+!data/processed/baseline_significance.json

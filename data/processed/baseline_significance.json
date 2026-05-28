@@ -1,0 +1,197 @@
+{
+  "comparison_basis": "d10_grin_wspd_exp",
+  "n_methods_compared": 4,
+  "n_methods_skipped": 1,
+  "skipped_methods": [
+    "csdi"
+  ],
+  "bonferroni_method": 0.01,
+  "bonferroni_family": 0.0033333333333333335,
+  "n_masks_overall": 15,
+  "bootstrap_n": 1000,
+  "bootstrap_seed": 42,
+  "notes": "bonferroni_method (0.01) corresponds to the 5 overall method comparisons. bonferroni_family (0.00333) corresponds to the 5 methods x 3 families = 15 family tests. Overall entries carry significant_method_bonferroni; per-family entries carry significant_family_bonferroni. Per-family entries with n_masks=3 carry a power_note flagging limited statistical power.",
+  "by_method": {
+    "linear": {
+      "n_masks_grin": 15,
+      "n_masks_baseline": 15,
+      "n_masks_used": 15,
+      "overall": {
+        "n_masks": 15,
+        "mean_diff": 0.11633414776566695,
+        "t_stat": 1.654187637475481,
+        "p_value": 0.12032716266171652,
+        "ci_low": -0.014765469853898499,
+        "ci_high": 0.25046369569186133,
+        "significant_method_bonferroni": false
+      },
+      "by_family": {
+        "mcar": {
+          "n_masks": 9,
+          "mean_diff": -0.012955195847093167,
+          "t_stat": -35.96404617814808,
+          "p_value": 3.91407049047046e-10,
+          "ci_low": -0.013605331656731931,
+          "ci_high": -0.0123545607270138,
+          "significant_family_bonferroni": true
+        },
+        "blockmcar": {
+          "n_masks": 3,
+          "mean_diff": 0.642115901974791,
+          "t_stat": 37.392313645562076,
+          "p_value": 0.0007144464948085884,
+          "ci_low": 0.6101770424255943,
+          "ci_high": 0.6690217971585884,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        },
+        "mnar": {
+          "n_masks": 3,
+          "mean_diff": -0.021579575605176832,
+          "t_stat": -12.569688270028852,
+          "p_value": 0.006269769726846844,
+          "ci_low": -0.024787242230314477,
+          "ci_high": -0.018914936282209083,
+          "significant_family_bonferroni": false,
+          "power_note": "n=3 observations; limited statistical power"
+        }
+      }
+    },
+    "locf": {
+      "n_masks_grin": 15,
+      "n_masks_baseline": 15,
+      "n_masks_used": 15,
+      "overall": {
+        "n_masks": 15,
+        "mean_diff": 0.4399364389091969,
+        "t_stat": 4.826034254345517,
+        "p_value": 0.00026908353056528136,
+        "ci_low": 0.2728890121644174,
+        "ci_high": 0.6257343157962321,
+        "significant_method_bonferroni": true
+      },
+      "by_family": {
+        "mcar": {
+          "n_masks": 9,
+          "mean_diff": 0.2399669218372932,
+          "t_stat": 21.25161174472448,
+          "p_value": 2.5271264288539586e-08,
+          "ci_low": 0.21971080998147585,
+          "ci_high": 0.2594453549044411,
+          "significant_family_bonferroni": true
+        },
+        "blockmcar": {
+          "n_masks": 3,
+          "mean_diff": 1.112424807456747,
+          "t_stat": 46.422531593484834,
+          "p_value": 0.0004637033160577918,
+          "ci_low": 1.0729796458014427,
+          "ci_high": 1.1557215422596507,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        },
+        "mnar": {
+          "n_masks": 3,
+          "mean_diff": 0.36735662157735754,
+          "t_stat": 125.97454631071224,
+          "p_value": 6.30076593967249e-05,
+          "ci_low": 0.36246058260500535,
+          "ci_high": 0.3725492414923417,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        }
+      }
+    },
+    "climatology": {
+      "n_masks_grin": 15,
+      "n_masks_baseline": 15,
+      "n_masks_used": 15,
+      "overall": {
+        "n_masks": 15,
+        "mean_diff": 1.3951738963366815,
+        "t_stat": 16.50138333108513,
+        "p_value": 1.43159896489528e-10,
+        "ci_low": 1.2279887933652625,
+        "ci_high": 1.5547740028487695,
+        "significant_method_bonferroni": true
+      },
+      "by_family": {
+        "mcar": {
+          "n_masks": 9,
+          "mean_diff": 1.5543944598976938,
+          "t_stat": 76.01878978779486,
+          "p_value": 9.992806928011515e-13,
+          "ci_low": 1.5189560762257674,
+          "ci_high": 1.591990523245703,
+          "significant_family_bonferroni": true
+        },
+        "blockmcar": {
+          "n_masks": 3,
+          "mean_diff": 0.7695409101321115,
+          "t_stat": 34.742575067512604,
+          "p_value": 0.0008274403614302931,
+          "ci_low": 0.728094949981369,
+          "ci_high": 0.8038106435237906,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        },
+        "mnar": {
+          "n_masks": 3,
+          "mean_diff": 1.5431451918582137,
+          "t_stat": 565.7565717986855,
+          "p_value": 3.124199438220167e-06,
+          "ci_low": 1.5401381299293522,
+          "ci_high": 1.5485904520800835,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        }
+      }
+    },
+    "knn": {
+      "n_masks_grin": 15,
+      "n_masks_baseline": 15,
+      "n_masks_used": 15,
+      "overall": {
+        "n_masks": 15,
+        "mean_diff": 1.0743403393082063,
+        "t_stat": 11.483473333010096,
+        "p_value": 1.6418257661578797e-08,
+        "ci_low": 0.8894233019749864,
+        "ci_high": 1.2388479523705684,
+        "significant_method_bonferroni": true
+      },
+      "by_family": {
+        "mcar": {
+          "n_masks": 9,
+          "mean_diff": 1.2029124517434533,
+          "t_stat": 62.39117509488934,
+          "p_value": 4.841977824906042e-12,
+          "ci_low": 1.1660893544061914,
+          "ci_high": 1.2383600112229216,
+          "significant_family_bonferroni": true
+        },
+        "blockmcar": {
+          "n_masks": 3,
+          "mean_diff": 0.3918391622342327,
+          "t_stat": 36.89841959194638,
+          "p_value": 0.000733679383786628,
+          "ci_low": 0.3713484885197993,
+          "ci_high": 0.40692333513785894,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        },
+        "mnar": {
+          "n_masks": 3,
+          "mean_diff": 1.3711251790764374,
+          "t_stat": 264.33810126354626,
+          "p_value": 1.431103832715173e-05,
+          "ci_low": 1.362890750276079,
+          "ci_high": 1.380706910809443,
+          "significant_family_bonferroni": true,
+          "power_note": "n=3 observations; limited statistical power"
+        }
+      }
+    }
+  },
+  "generated_at": "2026-05-28T01:11:57.463467+00:00"
+}
